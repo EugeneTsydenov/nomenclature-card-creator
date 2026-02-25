@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { ProductPreview } from "@/components/ProductPreview";
 import { CardCompleteness } from "@/components/CardCompleteness";
@@ -39,6 +39,11 @@ export default function Home() {
   const [showMobilePreview, setShowMobilePreview] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
+  useEffect(() => {
+    document.body.style.overflow = showMobilePreview ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [showMobilePreview]);
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -68,27 +73,30 @@ export default function Home() {
   return (
     <main>
       <div className="container mx-auto px-4 sm:px-10">
-        <div className="flex items-center justify-between py-6 border-b border-border gap-3">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between py-6 border-b border-border gap-3">
           <div className="min-w-0">
             <h1 className="text-xl font-semibold">Новый товар</h1>
             <p className="text-sm text-muted-foreground mt-0.5">
               Заполните карточку товара
             </p>
           </div>
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto">
             <Button
-              className="lg:hidden"
+              className="lg:hidden flex-1 sm:flex-none"
+              variant="outline"
               onClick={() => setShowMobilePreview(true)}
             >
-              Предпросмотр карточки товара
+              Предпросмотр
             </Button>
             <Button
               variant="outline"
+              className="flex-1 sm:flex-none"
               onClick={clearForm}
             >
               Очистить
             </Button>
             <Button
+              className="flex-1 sm:flex-none"
               onClick={form.handleSubmit(onSubmit, onValidationError)}
               disabled={status === "loading"}
             >
@@ -112,8 +120,8 @@ export default function Home() {
               />
             </div>
 
-            <div className="mb-4 flex items-center gap-3 rounded-lg border border-dashed border-primary/40 bg-primary/5 px-4 py-3">
-              <Sparkles className="w-5 h-5 text-primary shrink-0" />
+            <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center gap-3 rounded-lg border border-dashed border-primary/40 bg-primary/5 px-4 py-3">
+              <Sparkles className="w-5 h-5 text-primary shrink-0 hidden sm:block" />
               <p className="text-sm text-muted-foreground flex-1">
                 Введите название товара и нажмите кнопку — ИИ заполнит все поля
               </p>
@@ -121,6 +129,7 @@ export default function Home() {
                 type="button"
                 size="sm"
                 variant="secondary"
+                className="w-full sm:w-auto"
                 disabled={!values.name || aiLoading.all}
                 onClick={generateAll}
               >

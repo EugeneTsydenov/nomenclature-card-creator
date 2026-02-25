@@ -88,7 +88,7 @@ export function BaseTab({
         <Input placeholder="SKU-001" {...form.register("code")} />
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="flex flex-col gap-1.5">
           <Label>Единица</Label>
           <Select
